@@ -1,17 +1,10 @@
 from socket import *
-import sys
+from telnetlib import Telnet
 
 host = 'localhost'
 port = 450
 addr = (host, port)
 
-tcp_socket = socket(AF_INET, SOCK_STREAM)
-tcp_socket.connect(addr)
-
-data = input()
-data = str.encode(data)
-tcp_socket.send(data)
-data = tcp_socket.recv(1024)
-print(data)
-
-tcp_socket.close()
+with Telnet(host, port) as tn:
+    tn.write(b'5234 15 00:02:15.120 00\r')
+    print(tn.read_until(b'\n', timeout=1).decode('utf-8'))
